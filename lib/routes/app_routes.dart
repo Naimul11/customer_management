@@ -1,0 +1,5 @@
+/// App routes configuration
+class AppRoutes {
+  static const String login = '/login';
+  static const String customers = '/customers';
+}
