@@ -13,17 +13,48 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String? _initialRoute;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final isLoggedIn = await StorageUtils.isLoggedIn();
+    setState(() {
+      _initialRoute = isLoggedIn ? AppRoutes.customers : AppRoutes.login;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_initialRoute == null) {
+      return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+
     return GetMaterialApp(
       title: 'Customer Management',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       initialBinding: AppBinding(),
-      initialRoute: AppRoutes.login,
+      initialRoute: _initialRoute,
       getPages: [
         GetPage(
           name: AppRoutes.login,
@@ -34,37 +65,6 @@ class MyApp extends StatelessWidget {
           page: () => const CustomerListScreen(),
         ),
       ],
-      home: FutureBuilder<bool>(
-        future: StorageUtils.isLoggedIn(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          // Navigate based on login status
-          if (snapshot.data == true) {
-            // User is logged in, go to customer list
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.offAllNamed(AppRoutes.customers);
-            });
-          } else {
-            // User is not logged in, go to login
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.offAllNamed(AppRoutes.login);
-            });
-          }
-
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        },
-      ),
     );
   }
 }

@@ -31,10 +31,13 @@ class CustomerController extends GetxController {
     // loadCustomers();
   }
 
-  /// Load customers for specific page
+  /// Load customers for a specific page
   Future<void> loadCustomers({int? page}) async {
     if (page != null) {
       currentPage.value = page;
+    } else {
+      // Default to page 1 if no page specified
+      currentPage.value = 1;
     }
 
     errorMessage.value = '';
