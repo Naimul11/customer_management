@@ -121,30 +121,15 @@ class CustomerCard extends StatelessWidget {
                             width: 1,
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              isPositiveBalance
-                                  ? Icons.arrow_upward_rounded
-                                  : Icons.arrow_downward_rounded,
-                              size: 14,
-                              color: isPositiveBalance
-                                  ? const Color(0xFF059669)
-                                  : const Color(0xFFDC2626),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Balance: \$${balance.abs().toStringAsFixed(2)}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: isPositiveBalance
-                                    ? const Color(0xFF059669)
-                                    : const Color(0xFFDC2626),
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          'Balance: \$${balance.abs().toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: isPositiveBalance
+                                ? const Color(0xFF059669)
+                                : const Color(0xFFDC2626),
+                          ),
                         ),
                       ),
                     ],
