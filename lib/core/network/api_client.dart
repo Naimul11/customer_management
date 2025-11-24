@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import '../constants/api_constants.dart';
 import '../utils/storage_utils.dart';
 
-/// API client for making HTTP requests
 class ApiClient {
   late final Dio _dio;
 
@@ -19,7 +18,6 @@ class ApiClient {
       ),
     );
 
-    // Add interceptors for logging (optional)
     _dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
@@ -30,7 +28,6 @@ class ApiClient {
     );
   }
 
-  /// GET request
   Future<Response> get(
     String endpoint, {
     Map<String, dynamic>? queryParameters,
@@ -59,7 +56,6 @@ class ApiClient {
     }
   }
 
-  /// POST request
   Future<Response> post(
     String endpoint, {
     dynamic data,
@@ -76,7 +72,6 @@ class ApiClient {
     }
   }
 
-  /// Handle API errors
   String _handleError(DioException error) {
     String errorMessage = 'An unexpected error occurred';
 

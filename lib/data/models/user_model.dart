@@ -1,4 +1,3 @@
-/// User model for login response
 class UserModel {
   final String username;
   final int comId;
@@ -14,7 +13,6 @@ class UserModel {
     this.token,
   });
 
-  /// Create UserModel from JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       username: json['UserName'] ?? json['username'] ?? '',
@@ -25,7 +23,6 @@ class UserModel {
     );
   }
 
-  /// Convert UserModel to JSON
   Map<String, dynamic> toJson() {
     return {
       'username': username,

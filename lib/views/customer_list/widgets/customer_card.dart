@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../core/constants/api_constants.dart';
 
-/// Modern widget to display a customer card with enhanced visuals
 class CustomerCard extends StatelessWidget {
   final CustomerModel customer;
   final VoidCallback? onTap;
@@ -50,16 +49,13 @@ class CustomerCard extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
-                // Modern Circular Avatar with gradient border
                 _buildModernAvatar(imageUrl, theme),
                 const SizedBox(width: 20),
 
-                // Customer Details
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name
                       Text(
                         customer.name?.trim().isNotEmpty == true
                             ? customer.name!
@@ -75,7 +71,6 @@ class CustomerCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
 
-                      // Customer Code with icon
                       if (customer.code != null && customer.code!.isNotEmpty)
                         Row(
                           children: [
@@ -98,12 +93,10 @@ class CustomerCard extends StatelessWidget {
 
                       const SizedBox(height: 8),
 
-                      // Contact Information
                       ..._buildContactInfo(),
 
                       const SizedBox(height: 8),
 
-                      // Balance with modern chip design
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -136,7 +129,6 @@ class CustomerCard extends StatelessWidget {
                   ),
                 ),
 
-                // Navigation arrow
                 const SizedBox(width: 12),
                 Icon(
                   Icons.chevron_right_rounded,
@@ -154,7 +146,6 @@ class CustomerCard extends StatelessWidget {
   Widget _buildModernAvatar(String? imageUrl, ThemeData theme) {
     return Stack(
       children: [
-        // Gradient border
         Container(
           width: 80,
           height: 80,
@@ -285,7 +276,6 @@ class CustomerCard extends StatelessWidget {
       ]);
     }
 
-    // Remove last SizedBox if exists
     if (widgets.isNotEmpty) {
       widgets.removeLast();
     }

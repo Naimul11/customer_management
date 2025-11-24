@@ -69,11 +69,9 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-/// Dependency injection binding
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    // Initialize controllers immediately (put instead of lazyPut)
     Get.put<AuthController>(AuthController(), permanent: true);
     Get.put<CustomerController>(CustomerController(), permanent: true);
   }

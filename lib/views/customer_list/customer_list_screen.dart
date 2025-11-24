@@ -4,7 +4,6 @@ import '../../controllers/customer_controller.dart';
 import '../../controllers/auth_controller.dart';
 import 'widgets/customer_card.dart';
 
-/// Customer list screen with pagination
 class CustomerListScreen extends StatefulWidget {
   const CustomerListScreen({Key? key}) : super(key: key);
 
@@ -22,7 +21,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   @override
   void initState() {
     super.initState();
-    // Get or create the controllers
     try {
       _customerController = Get.find<CustomerController>();
     } catch (e) {
@@ -34,12 +32,10 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       _authController = Get.put(AuthController());
     }
 
-    // Add scroll listener to show pagination when scrolled to bottom
     _scrollController.addListener(() {
       if (_scrollController.hasClients) {
         final maxScroll = _scrollController.position.maxScrollExtent;
         final currentScroll = _scrollController.position.pixels;
-        // Show pagination when user is near the bottom (within 200px)
         if (maxScroll - currentScroll <= 200) {
           _showPagination.value = true;
         } else {
@@ -48,7 +44,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       }
     });
 
-    // Load customers after screen is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _customerController.loadCustomers();
     });
@@ -111,7 +106,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       ),
       body: Column(
         children: [
-          // Modern search bar
           Container(
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             decoration: BoxDecoration(
@@ -148,10 +142,8 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
             ),
           ),
 
-          // Customer list
           Expanded(
             child: Obx(() {
-              // Loading state (initial)
               if (_customerController.isLoading.value &&
                   _customerController.customers.isEmpty) {
                 return Center(
@@ -177,7 +169,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                 );
               }
 
-              // Error state (no customers loaded)
               if (_customerController.errorMessage.value.isNotEmpty &&
                   _customerController.customers.isEmpty) {
                 return Center(
@@ -238,7 +229,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                 );
               }
 
-              // Empty state
               if (_customerController.customers.isEmpty) {
                 return Center(
                   child: Column(
@@ -276,7 +266,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                 );
               }
 
-              // Customer list
               return RefreshIndicator(
                 onRefresh: _customerController.refreshCustomers,
                 color: Theme.of(context).primaryColor,
@@ -284,27 +273,22 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  itemCount: _customerController.customers.length + 1, // +1 for pagination
+                  itemCount: _customerController.customers.length + 1,
                   itemBuilder: (context, index) {
-                    // Show pagination after every 20 cards (at position 21, 41, 61, etc.)
                     if ((index + 1) % 21 == 0 && index > 0) {
                       return _buildPaginationWidget();
                     }
                     
-                    // Calculate the actual customer index (accounting for pagination widgets)
                     final customerIndex = index - (index ~/ 21);
                     
-                    // If we've shown all customers, don't render anything
                     if (customerIndex >= _customerController.customers.length) {
                       return const SizedBox.shrink();
                     }
                     
-                    // Customer card
                     final customer = _customerController.customers[customerIndex];
                     return CustomerCard(
                       customer: customer,
                       onTap: () {
-                        // Show customer details dialog
                         _showCustomerDetails(customer);
                       },
                     );
@@ -355,42 +339,33 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
 
     if (totalPages <= 1) return pageButtons;
 
-    // Previous button
     pageButtons.add(_buildNavigationButton(
       icon: Icons.chevron_left,
       onTap: currentPage > 1 ? () => _customerController.previousPage() : null,
     ));
 
-    // Calculate which 4 pages to show
     int startPage, endPage;
     
     if (totalPages <= 4) {
-      // Show all pages if total is 4 or less
       startPage = 1;
       endPage = totalPages;
     } else {
-      // Always show 4 pages
       if (currentPage <= 2) {
-        // Near the beginning
         startPage = 1;
         endPage = 4;
       } else if (currentPage >= totalPages - 1) {
-        // Near the end
         startPage = totalPages - 3;
         endPage = totalPages;
       } else {
-        // In the middle: show current page with pages around it
         startPage = currentPage - 1;
         endPage = currentPage + 2;
       }
     }
 
-    // Build page buttons
     for (int i = startPage; i <= endPage; i++) {
       pageButtons.add(_buildPageButton(i));
     }
 
-    // Next button
     pageButtons.add(_buildNavigationButton(
       icon: Icons.chevron_right,
       onTap: currentPage < totalPages ? () => _customerController.nextPage() : null,

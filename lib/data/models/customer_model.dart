@@ -1,4 +1,3 @@
-/// Customer model
 class CustomerModel {
   final int? id;
   final String? code;
@@ -24,7 +23,6 @@ class CustomerModel {
     this.remarks,
   });
 
-  /// Create CustomerModel from JSON
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
       id: json['Id'] ?? json['id'],
@@ -40,7 +38,6 @@ class CustomerModel {
     );
   }
 
-  /// Helper method to parse double from dynamic value
   static double? _parseDouble(dynamic value) {
     if (value == null) return null;
     if (value is double) return value;
@@ -49,7 +46,6 @@ class CustomerModel {
     return null;
   }
 
-  /// Convert CustomerModel to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -65,14 +61,11 @@ class CustomerModel {
     };
   }
 
-  /// Get full image URL
   String? getImageUrl(String baseImageUrl) {
     if (image == null || image!.isEmpty) return null;
     
-    // If image already contains full URL
     if (image!.startsWith('http')) return image;
     
-    // Construct full URL
     return baseImageUrl + image!;
   }
 }

@@ -3,11 +3,9 @@ import '../data/repositories/auth_repository.dart';
 import '../core/utils/storage_utils.dart';
 import '../core/network/api_client.dart';
 
-/// Controller for authentication operations
 class AuthController extends GetxController {
   late final AuthRepository _authRepository;
 
-  // Observable states
   final isLoading = false.obs;
   final errorMessage = ''.obs;
   final isLoggedIn = false.obs;
@@ -19,21 +17,17 @@ class AuthController extends GetxController {
     _checkLoginStatus();
   }
 
-  /// Check if user is already logged in
   Future<void> _checkLoginStatus() async {
     isLoggedIn.value = await StorageUtils.isLoggedIn();
   }
 
-  /// Login method
   Future<bool> login({
     required String username,
     required String password,
     int comId = 1,
   }) async {
-    // Clear previous error
     errorMessage.value = '';
 
-    // Validate inputs
     if (username.trim().isEmpty) {
       errorMessage.value = 'Please enter your username';
       return false;
@@ -57,7 +51,6 @@ class AuthController extends GetxController {
         print('[Auth] Login successful!');
         print('[Auth] Token: ${result.token != null ? "${result.token!.substring(0, 30)}..." : "null"}');
         
-        // Save login state with token
         await StorageUtils.saveLoginState(
           isLoggedIn: true,
           username: username,
@@ -82,13 +75,11 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Logout method
   Future<void> logout() async {
     await StorageUtils.clearAll();
     isLoggedIn.value = false;
   }
 
-  /// Clear error message
   void clearError() {
     errorMessage.value = '';
   }
